@@ -1,0 +1,88 @@
+.body {
+    height: 100vh;
+}
+
+.form-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.form-container {
+    width: 50%;
+}
+.form-container > * {
+    padding: 0.6rem 0;
+    /* margin: 0.4rem 0; */
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputs-container input {
+    width: 100%;
+    padding: 0.6rem;
+}
+.inputs-container .username-input, .inputs-container .email-input {
+    margin-bottom: 1rem;
+}
+
+.form-button {
+    width: 100%;
+}
+.form-button:hover {
+    background-color: rgb(141, 141, 141);
+}
+
+.form-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.form-intro .form-title {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+}
+
+.form-intro p {
+    text-align: left;
+    color: rgb(78, 78, 78);
+}
+
+.form-container h2 {
+    text-align: right;
+}
+.form-container p {
+    text-align: center;
+}
+
+button , input{
+    border-radius: 8px;
+    border: 1px solid gray;
+}
+.inputs-container input::placeholder {
+    font-family: inherit;  
+}
+
+.inputs-container input::placeholder, .form-container p, .form-intro p, .form-container h2, .form-button{
+    font-size: 1rem;   
+}
+
+@media (max-width: 660px){
+    .inputs-container input::placeholder, .form-container p, .form-intro p,.form-container h2, .form-button{
+        font-size: 0.7rem;   
+    }
+    .form-container .form-title {
+        font-size: 1.7rem;
+    }
+    .form-container {
+        width: 80%;
+    }
+}
