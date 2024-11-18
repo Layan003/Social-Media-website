@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/index.css"
 import "../styles/formStyle.css"
 
-
-export default function Form({ route, method }) {
+export default function Form({ method }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,35 +18,39 @@ export default function Form({ route, method }) {
       setLoading(true);
 
       try {
-        if (method == "Login"){
-          const res = await api.post("users/token/", {username, password})
+        if (method === "Login"){
+          const res = await api.post("token/", {username, password})
           localStorage.setItem("access", res.data.access);
           localStorage.setItem("refresh", res.data.refresh);
           console.log("login successful");
           navigate('/');
         }
         else {
-          const res = await api.post("users/signup/", {username, email, password})
-          localStorage.setItem("access", res.data.access);
-          localStorage.setItem("refresh", res.data.refresh);
-          console.log("Sign Up successful");
-          navigate('/');
+          const res = await api.post("signup/", {username, email, password})
+          if (res.status === 201){
+            console.log("Sign Up successful");
+            localStorage.setItem("access", res.data.access);
+            localStorage.setItem("refresh", res.data.refresh);
+            navigate('/profile/create'); 
+          }
+          else if (res.status === 400){
+            console.log("something wrong with your sign up. Try again...");
+            navigate('/signup'); 
+          }
         }
+
       }
       catch (error) {
         console.error("Error caught:", error);
         if (error.response) {
-        // Server responded with a status other than 2xx
           alert(
             `Error: ${error.response.status} - ${JSON.stringify(
               error.response.data
             )}`
           );
         } else if (error.request) {
-          // Request was made but no response received
           alert("No response received from the server.");
         } else {
-          // Something else happened while setting up the request
           alert(`Error: ${error.message}`);
         }
       }
@@ -81,7 +84,7 @@ export default function Form({ route, method }) {
             />
             {
               method === "Signup" ? (<input
-              type="text"
+              type="email"
               className="email-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -98,7 +101,7 @@ export default function Form({ route, method }) {
             />
           </div>
           <h2>Forget password?</h2>
-          <button className="form-button">
+          <button type='submit' className="form-button">
             {method === "Login" ? "Login" : "Signup"}
           </button>
           {method === "Login" ? (

@@ -1,14 +1,40 @@
 import React from 'react'
+import { useEffect, useState } from 'react';
+import api from '../api';
+import { useUser } from '../UserContext';
 
 export default function Profile() {
+  const [data, setData] = useState(null);
+  const {user} = useUser();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get('profile/');
+        if (res.status === 200) {
+          setData(res.data);
+        }
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+    fetchProfile();
+  }, [])
+
+
   return (
     <div className="profile-body">
       <div className="profile-card">
         <div className="profile-img-container">
-          <img className="profile-img" src='#' alt="" />
+          <img
+            className="profile-img"
+            src={`http://localhost:8000${data?.profile_img}`}
+            alt="profile image"
+          />
           <div className="profile-user-container">
-            <p className="profile-name">Lorem ipsum</p>
-            <p className="profile-username">@Lorem</p>
+            <p className="profile-name">{data?.name}</p>
+            <p className="profile-username">@{user.username}</p>
           </div>
         </div>
 
@@ -21,10 +47,7 @@ export default function Profile() {
 
         {/* Bio */}
         <div className="bio-container">
-          <p className="bio">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi
-            molestiae possimus, quia quos cupiditate velit temporibus.
-          </p>
+          <p className="bio">{data?.bio}</p>
         </div>
         <hr className="horizontal-line" />
 
@@ -45,11 +68,10 @@ export default function Profile() {
             <input
               className="birthday"
               type="birthday"
-              value={"12/12/2021"}
+              value={data?.birthday}
               readOnly
             />
           </div>
-
         </div>
       </div>
     </div>

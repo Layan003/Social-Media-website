@@ -7,6 +7,7 @@ import Home from './Home';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 
+
 function Logout() {
   localStorage.clear()
   return <Navigate to="/login" />
@@ -14,7 +15,7 @@ function Logout() {
 
 function LogoutAndSignUp() {
   localStorage.clear()
-  return <SignUp />
+  return <SignUp/>
 }
 
 
@@ -24,12 +25,14 @@ function App() {
     <>
     <Router>
       <Routes>
-        <Route path='/' exact element={<ProtectedRoute component={Home} />} />
+        <Route path='/' exact element={<ProtectedRoute><Home/></ProtectedRoute>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/signup' element={<LogoutAndSignUp/>} />
         <Route path='/logout' element={<Logout/>} />
-      
+        
 
+
+    
       </Routes>
     </Router>
      

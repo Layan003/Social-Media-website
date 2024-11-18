@@ -1,16 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.5;
+    color: #343e55;
+    background-color: #eeecf1;
+}
+
 .app-container {
     display: flex;
     justify-content: center;
-    align-items: stretch;
-    /* margin-top: 1rem; */
+    align-items:flex-start;
     margin: 0.5rem 1rem;
-    /* margin: 0 2rem; */
 }
+
 .app-container > * {
     background-color: #fefffe;
     border-radius: 10px;
     width: 100%;
     margin: 1rem;
+}
+
+.profile-intro {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-edit-icon svg {
+    width: 16px;
+}
+
+.profile-edit-icon:hover {
+    cursor: pointer;
 }
 
 .profile-body {
@@ -23,49 +52,46 @@
 .mutuals-body {
     flex-basis: 50%;
 
-
 }
 .profile-body {
     color: #818181;
     padding: 1rem;
-
 }
-.profile-img-container {
+
+.profile-img-container, .comment-container {
     display: flex;
     justify-content: start;
-    /* align-items: start; */
-    /* display: grid; */
-    /* grid-template-columns: 1fr 3fr; */
-    /* background-color: rgb(58, 166, 130); */
 }
-
 
 .profile-user-container {
     margin-left: 0.4rem;
 }
 
-.profile-img {
+.profile-img{
     width: 40px;
     height: 40px;
-    
     grid-row: 1 / 3;
-    /* background-color: aqua; */
+    border-radius: 50%;
+}
+.comment-img img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
 }
 
 .profile-name {
-    /* background-color: blue; */
     margin: 0;
     font-size: 0.8rem;
     font-weight: 600;
     color: #343e55;
 }
+
 .profile-username {
-    /* background-color: rgb(106, 106, 220); */
     margin: 0;
     font-size: 0.8rem;
     font-weight: 400;
     color: #818181;
-    
 }
 
 .profile-follow {
@@ -80,7 +106,7 @@
 
 .horizontal-line {
     width: 100%;
-    margin: 0 auto;
+    margin: 0.5rem auto 0 auto;
     border: none;
     border-radius: 6px;
     height: 0.5px;
@@ -94,12 +120,12 @@
     border-radius: 6px;
     height: 0.5px;
     background-color: #adadad;
-    
-
 }
+
+
+
 .bio-container {
     width: 80%;
-    /* margin: 0.5rem auto; */
     margin: 0.5rem 0.3rem;
 }
 
@@ -110,10 +136,12 @@
 .profile-info {
     margin: 0.5rem 0.3rem;
 }
+
 .birthday-container {
     display: flex;
     align-items: center;
 }
+
 .birthday {
     outline: none;
     background-color: transparent;
@@ -122,22 +150,26 @@
     font-size: 0.7rem;
 }
 
-.location-container {
-    display: flex;
-    align-items: center;
-}
-.location {
-    font-size: 0.7rem;
+.birthday-icon {
+    margin-right: 0.3rem;
 }
 
-.location-icon, .birthday-icon {
-    margin-right: 0.3rem;
+.birthday-icon svg {
+    width: 17px;
 }
 
 .posts-section {
     padding: 1rem;
 }
+
 .create-post-container {
+    display: grid;
+    grid-template-columns: 6fr 1fr 1fr;
+    border: 1px solid #818181;
+    border-radius: 7px;
+    margin: 0.5rem 0.3rem 1rem 0.3rem;
+}
+.create-comment-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -145,10 +177,47 @@
     border-radius: 7px;
     margin: 0.5rem 0.3rem 1rem 0.3rem;
 }
-
 .create-post-input {
     padding: 0.5rem;
     border: none;
+}
+
+#post_image {
+    display: none;
+}
+
+.create-post-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-post-icon svg {
+    width: 17px;
+}
+
+.create-post-icon:hover {
+    cursor: pointer;
+}
+
+.display-post-image {
+    max-width: 100%;         
+    max-height: 500px;   
+    overflow: hidden;    
+    border-radius: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display-post-image img {
+    max-width: 100%;    
+    max-height: 100%;   
+    object-fit: contain;
+}
+
+.create-post-input::placeholder{
+    content: 'post something here...';
 }
 
 .create-post-input:focus {
@@ -162,10 +231,56 @@
 .post-content {
     font-size: 0.8rem;
     font-weight: 400;
-    margin: 0.5rem 0.3rem;
-
-    
+    margin: 0.5rem 0.3rem;    
 }
+
+.post-image {
+    max-width: 100%;         
+    max-height: 500px;   
+    overflow: hidden;    
+    border-radius: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+
+.post-image img {
+    max-width: 100%;    
+    max-height: 100%;   
+    object-fit: contain;
+}
+
+.like-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    color: #818181;
+}
+
+.icons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #818181;
+}
+
+.icons div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icons > * {
+    padding: 0.1rem;
+}
+.icons svg {
+    width: 17px;
+}
+
+.icons svg:hover {
+    cursor: pointer;
+}
+
 .see-comments-btn {
     background-color: transparent;
     border: none;
@@ -175,6 +290,7 @@
 .see-comments-btn:hover {
     color: #818181;
 }
+
 .comment-name {
     font-size: 0.7rem;
     font-weight: 500;
@@ -185,25 +301,32 @@
 .comment-name:hover {
     color: #818181;
 }
+
 .comment-content {
     margin: 0.2rem 1rem;
     font-weight: 400;
-    font-size: 0.7rem;
-}
-.create-post-button {
-    background-color: #fefffe;
-    /* border: 1px solid #818181; */
-    border: none;
-    border-left: 1px solid #818181;
-    /* border-radius: 7px; */
-    padding: 0.5rem;
-    width: 15%;
+    font-size: 0.9rem;
 }
 
-.create-post-button:hover {
+.create-post-button {
+    background-color: #fefffe;
+    border: none;
+    border-left: 1px solid #818181;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.create-post-button:hover, .create-comment-button:hover {
     background-color: #818181;
 }
 
+.create-comment-button {
+    background-color: #fefffe;
+    border: none;
+    border-left: 1px solid #818181;
+    padding: 0.5rem;
+    max-width: 20%;
+}
 .mutuals-body {
     padding: 1rem;
 }
@@ -212,14 +335,17 @@
     font-size: 1rem;
     font-weight: 500;
 }
+
 @media (max-width: 821px) {
+
     .app-container {
         display: block;
     }
+
     .app-container > *{
         max-width: 90%;
         margin: 0 auto;
         margin-bottom: 1rem;
     }
-
 }
+

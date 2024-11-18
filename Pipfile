@@ -10,6 +10,8 @@ django-cors-headers = "*"
 simplejwt = "*"
 djangorestframework-simplejwt = "*"
 python-dotenv = "*"
+pillow = "*"
+sorl-thumbnail = "*"
 
 [dev-packages]
 

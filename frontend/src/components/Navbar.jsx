@@ -13,8 +13,6 @@ export default function Navbar() {
           </li>
           {/* <li className="nav-item">Dark</li> */}
           <li className='nav-item'><Link to='/logout'>Logout</Link></li>
-          {/* <li className="nav-item">About</li> */}
-          {/* <li className="nav-item"></li> */}
         </ul>
         <div className="search-box">
           <input className="search-input" type="text" placeholder="Search" />
