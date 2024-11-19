@@ -20,7 +20,7 @@ def sign_up(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_user_data(request):
+def get_user_info(request):
     data = {
         'id': request.user.id,
         'username': request.user.username,

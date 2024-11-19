@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ListPostSerializer, CommentSerializer
+from .serializers import ListPostSerializer, CommentSerializer, PostSerializer
 from .models import Post, Comment
 from rest_framework.response import Response
 from rest_framework import status
@@ -53,4 +53,47 @@ def comment(request):
             return Response({"message": "comment created successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_post(request):
+    if request.method == "POST":
+        content = request.data.get('content')
+        post_image = request.FILES.get('postImage')
+        if not content:
+            return Response({"message": "content is requires to create a post"}, status=status.HTTP_204_NO_CONTENT)
+        
+        post_data = {
+            'content': content,
+            'user': request.user.id,
+        }
+        if post_image:
+            post_data['post_image'] = post_image
+        
+        serializer = PostSerializer(data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"messages": "post created successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def delete_post(request):
+    if request.method == "POST":
+        post_id = request.data.get("postId")
+        if post_id:
+            try:
+                post = get_object_or_404(Post, id=post_id)
+                if post.user == request.user:
+                    post.delete()
+                    return Response({"message": "post was deleted successfully"}, status=status.HTTP_200_OK)
+            except Post.DoesNotExist:
+                return Response({"message": "post not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "post id is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_data(request):
+    if request.method == "GET":
+        # userID = request.
+        pass

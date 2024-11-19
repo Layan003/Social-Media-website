@@ -3,11 +3,17 @@ import { useEffect } from "react";
 import api from "../api";
 import { useUser } from "../UserContext";
 
+
 export default function Posts() {
   const [posts, setPosts] = useState([]);
   const { user } = useUser();
   const [showPostComments, setShowPostComments] = useState(null);
   const [comment, setComment] = useState("");
+
+  // post create
+  const [content, setContent] = useState("");
+  const [postImage, setPostImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const fetchPosts = async () => {
     try {
@@ -20,9 +26,68 @@ export default function Posts() {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setPostImage(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewImage(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content) {
+      alert("you have to write something...")
+      return
+    }
+
+    const formData = new FormData();
+    formData.append('content', content)
+    if(postImage) {
+      formData.append('postImage', postImage)
+    }
+    try {
+      const res = await api.post('post/create/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      if (res.status === 201){
+        console.log("post created!!!")
+        setPreviewImage(null);
+        setPostImage(null);
+        setContent('');
+        fetchPosts();
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
+  };
+
   useEffect(() => {
+    
     fetchPosts();
   }, []);
+  const handleDelete = async (postId) => {
+    const confirm = window.confirm("Are you sure you want to delete this post?");
+    if (confirm) {
+      try {
+        const res = await api.post('post/delete/', {postId})
+        if(res.status === 200){
+          alert("post deleted successfully");
+          fetchPosts();
+        }        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   const goToProfile = () => {
     console.log("to profilelee");
@@ -59,24 +124,78 @@ export default function Posts() {
     }
   };
 
+  const fetchUserData = async (userId) => {
+    try {
+      const res = await api.get(`user/${userId}`);
+      // <Profile data=res.data.profile>
+
+    }
+    catch (error) {
+      console.error(error);
+    }
+
+
+
+  }
+
   return (
     <div className="posts-section">
-      <div className="create-post-container">
+      {/* create post section */}
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="create-post-container"
+        method="post"
+      >
         <input
           className="create-post-input"
           type="text"
-          placeholder="Post something here..."
+          name="content"
+          placeholder="post something here..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
-        <button className="create-post-button">Post</button>
-      </div>
+        <input
+          type="file"
+          name="post_image"
+          accept="image/*"
+          id="post_image"
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+        <div
+          onClick={() => document.getElementById("post_image").click()}
+          className="create-post-icon"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20px"
+            viewBox="0 -960 960 960"
+            width="20px"
+            fill="#818181"
+          >
+            <path d="M480-480ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h312v72H216v528h528v-312h72v312q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm48-144h432L552-480 444-336l-72-96-108 144Zm408-312v-72h-72v-72h72v-72h72v72h72v72h-72v72h-72Z" />
+          </svg>
+        </div>
+        <button className="create-post-button" type="submit">
+          Post
+        </button>
+      </form>
+      {previewImage && (
+          <div id="display-post-image" className="display-post-image">
+            <img src={previewImage} alt="Preview" />
+          </div>
+        )}
       <hr className="horizontal-line" />
 
+      {/* display posts section */}
       <div className="posts-body">
         {posts.map((post) => {
           const is_liked = post.likes.includes(user.id);
           return (
             <div className="post-card" key={post.id}>
               <div className="profile-img-container" onClick={goToProfile}>
+                <div className="profile-img-intro" onClick={() => fetchUserData(post.user_id)}>
                 <img
                   className="profile-img"
                   src={`http://localhost:8000${post?.profile_image}`}
@@ -86,6 +205,11 @@ export default function Posts() {
                   <p className="profile-name">{post.name}</p>
                   <p className="profile-username">@{post.username}</p>
                 </div>
+                </div>
+                {post.user_id === user.id && (<div onClick={() => handleDelete(post.id)} className="delete-post-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#818181"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                </div>)}
+                
               </div>
               <p className="post-content">{post.content}</p>
               {post.post_image ? (
@@ -180,7 +304,7 @@ export default function Posts() {
                   {post.comments && post.comments.length > 0 ? (
                     post.comments.map((comment) => (
                       <div className="comment" key={comment.id}>
-                        <div className="profile-img-container">
+                        <div className="profile-img-intro">
                           <img
                             className="profile-img"
                             src={`http://localhost:8000${comment.user.profile?.profile_img}`}

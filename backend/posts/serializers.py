@@ -25,3 +25,11 @@ class ListPostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'content', 'user', 'post_image', 'likes', 'user_id', 'username', 'name', 'profile_image', 'profile_id', 'comments']
         extra_kwargs = {"user": {"read_only": True}}
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'user', 'post_image', 'content', 'created_at']
+        extra_kwargs = {
+            'created_at': {"read_only": True}
+        }

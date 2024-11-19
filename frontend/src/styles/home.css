@@ -34,11 +34,11 @@ body {
     justify-content: space-between;
 }
 
-.profile-edit-icon svg {
+.profile-edit-icon svg, .delete-post-icon svg, .edit-profile-icon svg {
     width: 16px;
 }
 
-.profile-edit-icon:hover {
+.profile-edit-icon:hover, .delete-post-icon:hover, .edit-profile-icon:hover {
     cursor: pointer;
 }
 
@@ -58,9 +58,14 @@ body {
     padding: 1rem;
 }
 
-.profile-img-container, .comment-container {
+.profile-img-container {
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
+}
+
+.profile-img-intro, .comment-container {
+    display: flex;
+    justify-content: flex-start;
 }
 
 .profile-user-container {
