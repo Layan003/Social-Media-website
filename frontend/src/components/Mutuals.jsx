@@ -1,4 +1,5 @@
 import React from 'react'
+// import defaultImage from '../assets/images/default_img.jpg'
 
 export default function Mutuals() {
   return (

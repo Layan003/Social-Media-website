@@ -31,7 +31,7 @@ export default function Form({ method }) {
             console.log("Sign Up successful");
             localStorage.setItem("access", res.data.access);
             localStorage.setItem("refresh", res.data.refresh);
-            navigate('/profile/create'); 
+            navigate('/profile/update'); 
           }
           else if (res.status === 400){
             console.log("something wrong with your sign up. Try again...");

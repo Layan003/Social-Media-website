@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ListPostSerializer, CommentSerializer, PostSerializer
-from .models import Post, Comment
+from .models import Post
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -45,7 +45,9 @@ def comment(request):
         data = {
             "content": content,
             "post": post.id,
-            "user": request.user.id
+            "user": request.user.id,
+            "profile_img": request.user.profile.profile_img,
+            "name": request.user.profile.name,
         }
         serializer = CommentSerializer(data=data)
         if serializer.is_valid():
@@ -93,7 +95,9 @@ def delete_post(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_user_data(request):
-    if request.method == "GET":
-        # userID = request.
-        pass
+def posts(request, pk):
+    posts = Post.objects.filter(user=pk)
+    if posts:
+        serializer = ListPostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({"message": "No posts available", 'data': []}, status=status.HTTP_200_OK)

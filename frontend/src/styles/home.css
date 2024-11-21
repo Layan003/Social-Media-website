@@ -68,6 +68,10 @@ body {
     justify-content: flex-start;
 }
 
+.profile-img-intro:hover {
+    cursor: pointer;
+}
+
 .profile-user-container {
     margin-left: 0.4rem;
 }

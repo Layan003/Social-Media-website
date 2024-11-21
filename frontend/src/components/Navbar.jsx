@@ -11,7 +11,7 @@ export default function Navbar() {
           <li className="logo">
             <a href="#">SocialApp</a>
           </li>
-          {/* <li className="nav-item">Dark</li> */}
+          <li className="nav-item"><Link to='/'>Home</Link></li>
           <li className='nav-item'><Link to='/logout'>Logout</Link></li>
         </ul>
         <div className="search-box">

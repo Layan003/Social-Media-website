@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Profile
-        fields = ['profile_img', 'name', 'bio', 'birthday']
+        fields = ['profile_img', 'name', 'bio', 'birthday', 'user', 'username']
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
