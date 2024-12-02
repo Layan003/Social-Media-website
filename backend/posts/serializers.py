@@ -16,7 +16,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ListPostSerializer(serializers.ModelSerializer):
-    # user_id = serializers.IntegerField(source='user.id', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     name = serializers.CharField(source='user.profile.name', read_only=True)
     profile_image = serializers.ImageField(source='user.profile.profile_img', read_only=True)

@@ -18,6 +18,9 @@ export default function Home() {
     const [postsLoading, setPostsLoading] = useState(true);
     const [reload, setReload] = useState(true);
     const {userId} = useParams();
+    const [followings, setFollowings] = useState(0);
+    const [followers, setFollowers] = useState(0);
+    
 
     const fetchProfile = async (userId) => {
       try {
@@ -33,6 +36,18 @@ export default function Home() {
       }
     }
 
+    const fetchFollowCount = async (userID) => {
+      try {
+        const res = await api.get(`get-follow/${userID}/`);
+        // console.log(res.data);
+        setFollowings(res.data.followings)
+        setFollowers(res.data.followers)
+  
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const fetchPosts = async () => {
       if (userId) {
         try {
@@ -47,7 +62,6 @@ export default function Home() {
           console.error(error);
         }
       } else if (user.id) {
-        // fetch all posts
         try {
           const res = await api.get("posts/");
           if (res.status === 200) {
@@ -70,10 +84,12 @@ export default function Home() {
       if (userId) {
         fetchProfile(userId);
         fetchPosts(userId);
+        fetchFollowCount(userId);
       }
       else if (user.id) {
         fetchProfile(user.id);
         fetchPosts(user.id)
+        fetchFollowCount(user.id);
       }
     }, [user, userId, reload]);
 
@@ -89,17 +105,17 @@ export default function Home() {
         {user.id}
       </div>
       
-      <Navbar />
+      <Navbar setReload={setReload} setPosts={setPosts} />
       <div className="app-container">
         
         {/* profile */}
-        <Profile profile={profile}/> 
+        <Profile profile={profile} followers={followers} followings={followings} fetchFollowCount={fetchFollowCount}/> 
 
         {/* posts */}
         <Posts posts={posts} setReload={setReload}/>
 
         {/* mutuals */}
-        <Mutuals/>
+        {/* <Mutuals/> */}
       </div>
     </div>
   )

@@ -5,12 +5,33 @@ from .serializers import ListPostSerializer, CommentSerializer, PostSerializer
 from .models import Post
 from rest_framework.response import Response
 from rest_framework import status
+from users.models import Follower
+from django.db.models import Q
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def search(request):
+    if request.method == "GET":
+        query = request.GET.get('query')
+        if query:
+            posts = Post.objects.filter(Q(content__icontains=query))
+            if posts.exists():
+                posts_serializer = ListPostSerializer(posts, many=True)
+                return Response(posts_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"no query was found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "no result found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_posts(request):
     if request.method == "GET":
-        posts = Post.objects.all().order_by('-id')
+        current_user = request.user
+        followings = list(Follower.objects.filter(follower=current_user).values_list('following', flat=True))
+        posts = Post.objects.filter(user__in=followings).order_by('-id')[:30]
+        if not posts:
+            posts = Post.objects.all().order_by('-id')[:30]
+
         serializer = ListPostSerializer(posts, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -96,7 +117,7 @@ def delete_post(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def posts(request, pk):
-    posts = Post.objects.filter(user=pk)
+    posts = Post.objects.filter(user=pk).order_by('-id')
     if posts:
         serializer = ListPostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

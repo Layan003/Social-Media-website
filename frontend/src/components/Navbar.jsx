@@ -2,8 +2,27 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import '../styles/index.css'
 import '../styles/navbar.css'
+import { useState } from 'react';
+import api from '../api';
 
-export default function Navbar() {
+export default function Navbar({setReload, setPosts}) {
+  const [query, setQuery] = useState('');
+
+  const handleSearch = async () => {
+    try {
+      const res = await api.get(`search?query=${encodeURIComponent(query)}`)
+      // console.log(query)
+      // console.log(res.data);
+      if (res.status == 200){
+        setPosts(res.data);
+        setReload(true);
+      }
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="nav-body">
       <nav className="navbar-container">
@@ -15,8 +34,8 @@ export default function Navbar() {
           <li className='nav-item'><Link to='/logout'>Logout</Link></li>
         </ul>
         <div className="search-box">
-          <input className="search-input" type="text" placeholder="Search" />
-          <a className="search-icon" href="#">
+          <input className="search-input" type="text" placeholder="Search" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <a className="search-icon" onClick={handleSearch}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="20px"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import api from "../api";
 import { useUser } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import defaultImage from "../assets/images/default_img.jpg"
 
 export default function Posts({ posts, setReload }) {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function Posts({ posts, setReload }) {
         },
       });
       if (res.status === 201) {
-        console.log("post created!!!");
+        // console.log("post created!!!");
         setPreviewImage(null);
         setPostImage(null);
         setContent("");
@@ -107,6 +108,7 @@ export default function Posts({ posts, setReload }) {
 
   const handleFetchProfile = (userId) => {
     navigate(`/${userId}`);
+    setReload((reload) => !reload);
   };
 
   return (
@@ -171,11 +173,18 @@ export default function Posts({ posts, setReload }) {
                     className="profile-img-intro"
                     onClick={() => handleFetchProfile(post.user)}
                   >
-                    <img
+                    {
+                      post.profile_img ? (<img
+                        className="profile-img"
+                        src={`http://localhost:8000${post.profile_image}`}
+                        alt=""
+                      />) : (<img
                       className="profile-img"
-                      src={`http://localhost:8000${post?.profile_image}`}
+                      src={defaultImage}
                       alt=""
-                    />
+                    />)
+                    }
+                    
                     <div className="profile-user-container">
                       <p className="profile-name">{post.name}</p>
                       <p className="profile-username">@{post.username}</p>

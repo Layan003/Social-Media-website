@@ -19,3 +19,15 @@ def create_profile(sender, created, instance, **kwargs):
         user_profile.save()
 
 post_save.connect(create_profile, sender=User)
+
+class Follower(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    
+    class Meta:
+        unique_together = ('follower', 'following')
+
+    def __str__(self):
+        return f'{self.follower.username} is following {self.following.username}'
+
+   
