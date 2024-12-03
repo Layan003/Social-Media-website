@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import UserSerializer, ProfileSerializer, FollowerSerializer
+from .serializers import UserSerializer, ProfileSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from .models import Follower
+from django.contrib.auth import authenticate
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -19,6 +20,25 @@ def sign_up(request):
         return Response({"access": str(access), 'refresh': str(refresh)}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        if not User.objects.filter(username=username).exists():
+            return Response({"error": "Username doesn't exists"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"error": "Incorrect password"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+    refresh = RefreshToken.for_user(user)
+    access = refresh.access_token
+    return Response({"access": str(access), 'refresh': str(refresh)}, status=status.HTTP_200_OK)
+
+        
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_user_info(request):

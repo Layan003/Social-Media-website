@@ -11,58 +11,57 @@ export default function Form({ method }) {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [errorMessages, setErrorMessages] = useState({});
+    const [errorMessage, setErrorMessage] = useState(''); //for login 
+
 
 
     const handleSubmit = async (e) => {
       e.preventDefault();
       setLoading(true);
 
-      try {
-        if (method === "Login"){
-          const res = await api.post("token/", {username, password})
+      if (method === "Login") {
+        try {
+          const res = await api.post("token/", { username, password });
           localStorage.setItem("access", res.data.access);
           localStorage.setItem("refresh", res.data.refresh);
-          console.log("login successful");
-          navigate('/');
+          // console.log("login successful");
+          navigate("/");
+        } catch (error) {
+          if (error.response && error.response.data) {
+            setErrorMessage(error.response.data.error);
+            console.log(error.response.data)
+          }
+        } finally {
+          setLoading(false);
         }
-        else {
-          const res = await api.post("signup/", {username, email, password})
-          if (res.status === 201){
+      } 
+      else {
+        try {
+          const res = await api.post("signup/", { username, email, password });
+          if (res.status === 201) {
             console.log("Sign Up successful");
             localStorage.setItem("access", res.data.access);
             localStorage.setItem("refresh", res.data.refresh);
-            navigate('/profile/update'); 
+            navigate("/profile/update");
           }
-          else if (res.status === 400){
-            console.log("something wrong with your sign up. Try again...");
-            navigate('/signup'); 
+        } catch (error) {
+          if (error.response && error.response.data) {
+            console.error("Error response:", error.response.data);
+            setErrorMessages(error.response.data);
           }
-        }
-
-      }
-      catch (error) {
-        console.error("Error caught:", error);
-        if (error.response) {
-          alert(
-            `Error: ${error.response.status} - ${JSON.stringify(
-              error.response.data
-            )}`
-          );
-        } else if (error.request) {
-          alert("No response received from the server.");
-        } else {
-          alert(`Error: ${error.message}`);
+        } finally {
+          setLoading(false);
         }
       }
-      finally {
-        setLoading(false);
-      }
-    }
+    };
 
     if (loading) {
       return <div>Loading...</div>
     }
 
+
+    const allErrors = Object.values(errorMessages).flat();
   return (
     <div className="body">
       <div className="form-body">
@@ -82,16 +81,18 @@ export default function Form({ method }) {
               placeholder="Username"
               required
             />
-            {
-              method === "Signup" ? (<input
-              type="email"
-              className="email-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email: "
-              required
-            />) : (<span></span>)
-            }
+            {method === "Signup" ? (
+              <input
+                type="email"
+                className="email-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email: "
+                required
+              />
+            ) : (
+              <span></span>
+            )}
             <input
               type="password"
               placeholder="Password: "
@@ -99,9 +100,27 @@ export default function Form({ method }) {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {/* display error messages for sign up */}
+            {allErrors.length > 0 && (
+              <div className="warning-message">
+                {allErrors.map((message, index) => (
+                  <p key={index}>{message}</p>
+                ))}
+              </div>
+            )}
+
+
+            {/* display error messages for login */}
+            {errorMessage && (
+              <div className="warning-message">
+                <p>{errorMessage}</p>
+              </div>
+            )}
           </div>
+
           <h2>Forget password?</h2>
-          <button type='submit' className="form-button">
+
+          <button type="submit" className="form-button">
             {method === "Login" ? "Login" : "Signup"}
           </button>
           {method === "Login" ? (
