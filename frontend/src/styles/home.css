@@ -274,6 +274,11 @@ body {
     color: #818181;
 }
 
+.like-icon-container p, .comment-icon-container p {
+    margin: auto;
+    font-size: 0.8rem;
+}
+
 .icons div {
     display: flex;
     justify-content: center;

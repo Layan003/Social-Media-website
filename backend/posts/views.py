@@ -28,6 +28,7 @@ def list_posts(request):
     if request.method == "GET":
         current_user = request.user
         followings = list(Follower.objects.filter(follower=current_user).values_list('following', flat=True))
+        followings.append(current_user.id)
         posts = Post.objects.filter(user__in=followings).order_by('-id')[:30]
         if not posts:
             posts = Post.objects.all().order_by('-id')[:30]

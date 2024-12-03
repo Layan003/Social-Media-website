@@ -35,7 +35,7 @@ export default function Navbar({setReload, setPosts}) {
         </ul>
         <div className="search-box">
           <input className="search-input" type="text" placeholder="Search" value={query} onChange={(e) => setQuery(e.target.value)} />
-          <a className="search-icon" onClick={handleSearch}>
+          <a className="search-icon" onClick={handleSearch} >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="20px"

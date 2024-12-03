@@ -52,11 +52,6 @@
     border-radius: 15px;
 }
 
-.search-box>* {
-
-    margin: 0 0.2rem;
-}
-
 .search-icon {
     display: flex;
     justify-content: center;

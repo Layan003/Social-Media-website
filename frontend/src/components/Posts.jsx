@@ -174,7 +174,7 @@ export default function Posts({ posts, setReload }) {
                     onClick={() => handleFetchProfile(post.user)}
                   >
                     {
-                      post.profile_img ? (<img
+                      post.profile_image ? (<img
                         className="profile-img"
                         src={`http://localhost:8000${post.profile_image}`}
                         alt=""
@@ -190,7 +190,7 @@ export default function Posts({ posts, setReload }) {
                       <p className="profile-username">@{post.username}</p>
                     </div>
                   </div>
-                  {post.user_id === user.id && (
+                  {post.user === user.id && (
                     <div
                       onClick={() => handleDelete(post.id)}
                       className="delete-post-icon"
