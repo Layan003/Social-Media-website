@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/index.css"
 import "../styles/formStyle.css"
-
+import Loading from './Loading';
 export default function Form({ method }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -13,6 +13,7 @@ export default function Form({ method }) {
     const navigate = useNavigate();
     const [errorMessages, setErrorMessages] = useState({});
     const [errorMessage, setErrorMessage] = useState(''); //for login 
+    const [error, setError] = useState('');
 
 
 
@@ -28,6 +29,7 @@ export default function Form({ method }) {
           // console.log("login successful");
           navigate("/");
         } catch (error) {
+          setError('Invalid credentials. Please try again.');
           if (error.response && error.response.data) {
             setErrorMessage(error.response.data.error);
             console.log(error.response.data)
@@ -56,9 +58,6 @@ export default function Form({ method }) {
       }
     };
 
-    if (loading) {
-      return <div>Loading...</div>
-    }
 
 
     const allErrors = Object.values(errorMessages).flat();
@@ -111,11 +110,13 @@ export default function Form({ method }) {
 
 
             {/* display error messages for login */}
-            {errorMessage && (
+            {/* {errorMessage && (
               <div className="warning-message">
                 <p>{errorMessage}</p>
               </div>
-            )}
+            )} */}
+
+            {error && (<div className='warning-message'>{error}</div>)}
           </div>
 
           <h2>Forget password?</h2>
@@ -134,6 +135,7 @@ export default function Form({ method }) {
           )}
         </form>
       </div>
+      {loading ? <Loading />: <span></span>}
     </div>
   );
 }

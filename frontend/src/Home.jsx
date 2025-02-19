@@ -9,7 +9,8 @@ import { useEffect } from 'react'
 import { useUser } from './UserContext'
 import api from './api'
 import { useParams } from 'react-router-dom'
-
+import { useLayoutEffect } from 'react'
+import { useLocation } from 'react-router-dom';
 export default function Home() {
     const { user, fetchUserData } = useUser();
     const [profile, setProfile] = useState(null);
@@ -20,6 +21,11 @@ export default function Home() {
     const {userId} = useParams();
     const [followings, setFollowings] = useState(0);
     const [followers, setFollowers] = useState(0);
+    const [isFollowed, setIsFollowed] = useState(null);
+    // const [getViralPosts, setGetViralPosts] = useState(false);
+    const location = useLocation();
+
+    
     
 
     const fetchProfile = async (userId) => {
@@ -75,44 +81,94 @@ export default function Home() {
         }
       }
     }
+    const fetchFollowed = async () => {
+      try {
+        if (userId) {
+          const res = await api.get(`follow/${userId}/`);
+          if (res.data.message === "followed") {
+            setIsFollowed(true);
+          } else if (res.data.message === "not followed") {
+            setIsFollowed(false);
+          }
+          setReload((reload) => !reload);
+        } else if (user.id) {
+          const res = await api.get(`follow/${user.id}/`);
+          if (res.data.message === "followed") {
+            setIsFollowed(true);
+          } else if (res.data.message === "not followed") {
+            setIsFollowed(false);
+          }
+          setReload((reload) => !reload);
+        }
+        // console.log(res.status);
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
  
     useEffect(() => {
       fetchUserData();
+
     }, [])
+  // useLayoutEffect(() => {
+  //   fetchFollowed();
+    
+  // }, [isFollowed]);
+
+
+  const fetchViralPosts = async () => {
+    try {
+      const res = await api.get('posts/viral/')
+      if (res.status === 200) {
+        if (res.data) {
+          setPosts(res.data);
+          setPostsLoading(false);
+          console.log(res.data)
+        }
+      }
+      
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
     useEffect(() => {
+      // if (location.pathname == 'viral-posts') {
+      //   fetchViralPosts();
+      //   return
+      // }
       if (userId) {
         fetchProfile(userId);
         fetchPosts(userId);
         fetchFollowCount(userId);
+        fetchFollowed();
       }
       else if (user.id) {
         fetchProfile(user.id);
         fetchPosts(user.id)
         fetchFollowCount(user.id);
+        fetchFollowed();
       }
-    }, [user, userId, reload]);
+
+    }, [user, userId]);
 
     if (profileLoading || postsLoading ) {
       return <div>Loading...</div>
     }
 
+  
+
   return (
-    <div className="app-body">
-      <div>
-        {user.username}
-        <br />
-        {user.id}
-      </div>
-      
+    <div className="app-body">      
       <Navbar setReload={setReload} setPosts={setPosts} />
       <div className="app-container">
         
         {/* profile */}
-        <Profile profile={profile} followers={followers} followings={followings} fetchFollowCount={fetchFollowCount}/> 
+        <Profile profile={profile} followers={followers} followings={followings} fetchFollowCount={fetchFollowCount} fetchFollowed={fetchFollowed} setIsFollowed={setIsFollowed} isFollowed={isFollowed}/> 
 
         {/* posts */}
-        <Posts posts={posts} setReload={setReload}/>
+        <Posts posts={posts} setReload={setReload} fetchPosts={fetchPosts}/>
 
         {/* mutuals */}
         {/* <Mutuals/> */}

@@ -8,5 +8,7 @@ urlpatterns = [
     path('post/create/', create_post, name='create_post'),
     path('post/delete/', delete_post, name='delete_post'),
     path('user/<int:pk>/posts/', posts, name='posts'),
-    path('search/', search, name='search')
+    path('search/', search, name='search'),
+    # path('posts/viral/', viral_posts),
+
 ]

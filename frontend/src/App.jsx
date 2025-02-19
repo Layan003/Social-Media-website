@@ -30,6 +30,8 @@ function App() {
         <Route path='/login' element={<Login/>} />
         <Route path='/signup' element={<LogoutAndSignUp/>} />
         <Route path='/logout' element={<Logout/>} />
+        <Route path='/viral-posts' element={<ProtectedRoute><Home/></ProtectedRoute>} />
+
         
       </Routes>
     </Router>
@@ -39,3 +41,4 @@ function App() {
 }
 
 export default App
+

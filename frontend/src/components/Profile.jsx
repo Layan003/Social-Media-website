@@ -5,30 +5,31 @@ import defaultImage from "../assets/images/default_img.jpg";
 import { useParams } from "react-router-dom";
 import api from "../api";
 
-export default function Profile({ profile, followers, followings, fetchFollowCount }) {
+export default function Profile({ profile, followers, followings, fetchFollowCount, fetchFollowed, setIsFollowed, isFollowed }) {
   const { user } = useUser();
   const navigate = useNavigate();
-  const [isFollowed, setIsFollowed] = useState(null);
+  // const [isFollowed, setIsFollowed] = useState(null);
   const { userId } = useParams();
 
 
-  const fetchFollowed = async () => {
-    if (userId) {
-      if (userId !== user.id) {
-        try {
-          const res = await api.get(`follow/${userId}/`);
-          // console.log(res.status);
-          if (res.data.message === "followed") {
-            setIsFollowed(true);
-          } else if (res.data.message === "not followed") {
-            setIsFollowed(false);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-  };
+  // const fetchFollowed = async () => {
+  //       try {
+  //         const res = await api.get(`follow/${userId}/`);
+  //         // console.log(res.status);
+  //         if (res.data.message === "followed") {
+  //           setIsFollowed(true);
+  //         } else if (res.data.message === "not followed") {
+  //           setIsFollowed(false);
+  //         } 
+  //         setReload((reload) => !reload);
+
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  // };
+  // if (isFollowed === null) {
+  //   return <p>Loading...</p>; // Show loading state until the API response comes
+  // }
   useEffect(() => {
     fetchFollowed();
     // console.log(isFollowed);

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import api from "../api";
 import { useUser } from "../UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import defaultImage from "../assets/images/default_img.jpg"
 
-export default function Posts({ posts, setReload }) {
+export default function Posts({ posts, setReload, fetchPosts }) {
   const navigate = useNavigate();
   const { user } = useUser();
   const [showPostComments, setShowPostComments] = useState(null);
@@ -12,6 +12,7 @@ export default function Posts({ posts, setReload }) {
   const [content, setContent] = useState("");
   const [postImage, setPostImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const { userId } = useParams();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -67,6 +68,7 @@ export default function Posts({ posts, setReload }) {
         if (res.status === 200) {
           alert("post deleted successfully");
           setReload((reload) => !reload);
+          fetchPosts();
         }
       } catch (error) {
         console.error(error);
@@ -79,9 +81,11 @@ export default function Posts({ posts, setReload }) {
       const res = await api.post("like/", { postId });
       if (res.status === 200) {
         setReload((reload) => !reload);
+        fetchPosts();
       }
     } catch (error) {
       console.error(error);
+      setReload((reload) => !reload);
     }
   };
 
@@ -98,6 +102,7 @@ export default function Posts({ posts, setReload }) {
       const res = await api.post("comment/", { postId, comment });
       if (res.status === 201) {
         setReload((reload) => !reload);
+        fetchPosts();
       } else {
         alert("error while creating the comment. Please try again...");
       }
@@ -114,52 +119,58 @@ export default function Posts({ posts, setReload }) {
   return (
     <div className="posts-section">
       {/* create post section */}
-      <form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        className="create-post-container"
-        method="post"
-      >
-        <input
-          className="create-post-input"
-          type="text"
-          name="content"
-          placeholder="post something here..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <input
-          type="file"
-          name="post_image"
-          accept="image/*"
-          id="post_image"
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
-        <div
-          onClick={() => document.getElementById("post_image").click()}
-          className="create-post-icon"
+      {(userId && (userId == user.id)) || !userId ? (
+         <div>
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="create-post-container"
+          method="post"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="20px"
-            viewBox="0 -960 960 960"
-            width="20px"
-            fill="#818181"
+          <input
+            className="create-post-input"
+            type="text"
+            name="content"
+            placeholder="post something here..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <input
+            type="file"
+            name="post_image"
+            accept="image/*"
+            id="post_image"
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          <div
+            onClick={() => document.getElementById("post_image").click()}
+            className="create-post-icon"
           >
-            <path d="M480-480ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h312v72H216v528h528v-312h72v312q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm48-144h432L552-480 444-336l-72-96-108 144Zm408-312v-72h-72v-72h72v-72h72v72h72v72h-72v72h-72Z" />
-          </svg>
-        </div>
-        <button className="create-post-button" type="submit">
-          Post
-        </button>
-      </form>
-      {previewImage && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="20px"
+              viewBox="0 -960 960 960"
+              width="20px"
+              fill="#818181"
+            >
+              <path d="M480-480ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h312v72H216v528h528v-312h72v312q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm48-144h432L552-480 444-336l-72-96-108 144Zm408-312v-72h-72v-72h72v-72h72v72h72v72h-72v72h-72Z" />
+            </svg>
+          </div>
+          <button className="create-post-button" type="submit">
+            Post
+          </button>
+        </form>
+        {previewImage && (
         <div id="display-post-image" className="display-post-image">
           <img src={previewImage} alt="Preview" />
         </div>
+        )}
+        <hr className="horizontal-line" />
+      </div>
+      ) : (
+        <span></span>
       )}
-      <hr className="horizontal-line" />
 
       {/* display posts section */}
       <div className="posts-body">
@@ -173,18 +184,16 @@ export default function Posts({ posts, setReload }) {
                     className="profile-img-intro"
                     onClick={() => handleFetchProfile(post.user)}
                   >
-                    {
-                      post.profile_image ? (<img
+                    {post.profile_image ? (
+                      <img
                         className="profile-img"
                         src={`http://localhost:8000${post.profile_image}`}
                         alt=""
-                      />) : (<img
-                      className="profile-img"
-                      src={defaultImage}
-                      alt=""
-                    />)
-                    }
-                    
+                      />
+                    ) : (
+                      <img className="profile-img" src={defaultImage} alt="" />
+                    )}
+
                     <div className="profile-user-container">
                       <p className="profile-name">{post.name}</p>
                       <p className="profile-username">@{post.username}</p>

@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from users.models import Follower
 from django.db.models import Q
+from django.db.models import Count
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -123,3 +125,15 @@ def posts(request, pk):
         serializer = ListPostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({"message": "No posts available", 'data': []}, status=status.HTTP_200_OK)
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def viral_posts(request):
+#     posts = Post.objects.all().annotate(
+#         num_likes=Count('likes', related_name='post_likes'),
+#         num_comments=Count('comments', related_name='post_comments')  
+#     ).order_by('-num_likes', '-num_comments') 
+#     if posts:
+#         serializer = ListPostSerializer(posts, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#     return Response({"message": "No posts available", 'data': []}, status=status.HTTP_200_OK)

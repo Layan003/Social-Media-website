@@ -70,15 +70,15 @@ def profile(request, pk):
 @permission_classes([IsAuthenticated])
 def update_profile(request):
     if request.method == "POST":
-        name = request.data.get('name')
         profile = request.user.profile
+        profile_img = request.FILES.get('profile_img', None)
 
         data = {
             'user': request.user.id,
-            'name': name,
+            'name': request.data.get('name'),
             'bio': request.data.get('bio'),
             'birthday': request.data.get('birthday'),
-            'profile_img': request.FILES.get('profile_img')
+            'profile_img': profile_img if profile_img else profile.profile_img
         }
 
         serializer = ProfileSerializer(profile, data=data, partial=True)

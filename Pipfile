@@ -12,6 +12,11 @@ djangorestframework-simplejwt = "*"
 python-dotenv = "*"
 pillow = "*"
 sorl-thumbnail = "*"
+asgiref = "*"
+pyjwt = "*"
+pytz = "*"
+sqlparse = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
