@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/index.css"
 import "../styles/formStyle.css"
 import Loading from './Loading';
+
 export default function Form({ method }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -54,11 +55,10 @@ export default function Form({ method }) {
           }
         } finally {
           setLoading(false);
+        
         }
       }
     };
-
-
 
     const allErrors = Object.values(errorMessages).flat();
   return (
@@ -118,8 +118,8 @@ export default function Form({ method }) {
 
             {error && (<div className='warning-message'>{error}</div>)}
           </div>
-
-          <h2>Forget password?</h2>
+            {method==='Login'&&(<h2>Forget password?</h2>)}
+          
 
           <button type="submit" className="form-button">
             {method === "Login" ? "Login" : "Signup"}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import "./styles/home.css"
-import "./styles/index.css"
+// import "./styles/home.css"
+// import "./styles/index.css"
 import Posts from './components/Posts'
 import Profile from './components/Profile'
 import Mutuals from './components/Mutuals'
@@ -9,8 +9,10 @@ import { useEffect } from 'react'
 import { useUser } from './UserContext'
 import api from './api'
 import { useParams } from 'react-router-dom'
-import { useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom';
+import Loading from './components/Loading'
+
+
 export default function Home() {
     const { user, fetchUserData } = useUser();
     const [profile, setProfile] = useState(null);
@@ -111,10 +113,7 @@ export default function Home() {
       fetchUserData();
 
     }, [])
-  // useLayoutEffect(() => {
-  //   fetchFollowed();
-    
-  // }, [isFollowed]);
+  
 
 
   const fetchViralPosts = async () => {
@@ -154,15 +153,15 @@ export default function Home() {
     }, [user, userId]);
 
     if (profileLoading || postsLoading ) {
-      return <div>Loading...</div>
+      return <Loading/>
     }
 
   
 
   return (
-    <div className="app-body">      
+    <div className="">      
       <Navbar setReload={setReload} setPosts={setPosts} />
-      <div className="app-container">
+      <div className="grid-cols-1 md:grid md:grid-cols-3 p-3 gap-2 bg-gray-100 min-h-[100vh]">
         
         {/* profile */}
         <Profile profile={profile} followers={followers} followings={followings} fetchFollowCount={fetchFollowCount} fetchFollowed={fetchFollowed} setIsFollowed={setIsFollowed} isFollowed={isFollowed}/> 

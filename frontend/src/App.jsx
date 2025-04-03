@@ -1,4 +1,4 @@
-import './styles/App.css'
+// import './styles/index.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/login'
 import SignUp from './components/Signup'
@@ -30,7 +30,6 @@ function App() {
         <Route path='/login' element={<Login/>} />
         <Route path='/signup' element={<LogoutAndSignUp/>} />
         <Route path='/logout' element={<Logout/>} />
-        <Route path='/viral-posts' element={<ProtectedRoute><Home/></ProtectedRoute>} />
 
         
       </Routes>

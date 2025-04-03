@@ -1,16 +1,23 @@
-:root {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  line-height: 1.5;
-  color: #343e55;
-  background-color: #eeecf1;
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-3xl: 120rem;
+  --color-black: #000;
+  --color-white-100: #F4F0ED;
+  --color-white: #FFF;
+  --color-blue: #0066ff;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  box-sizing: border-box;
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

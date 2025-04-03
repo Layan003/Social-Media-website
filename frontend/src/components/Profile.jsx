@@ -60,13 +60,13 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
   };
 
   return (
-    <div className="profile-body">
-      <div className="profile-card">
-        <div className="profile-img-container">
-          <div className="profile-img-intro">
+    <div className="profile-body md:col-span-1">
+      <div className="profile-card p-3 bg-white rounded-lg shadow-md">
+        <div className="profile-img-container flex justify-between">
+          <div className="profile-img-intro flex gap-2">
             {profile.profile_img ? (
               <img
-                className="profile-img"
+                className="profile-img rounded-full w-[50px] h-[50px] "
                 src={`http://localhost:8000${profile?.profile_img}`}
                 alt="profile image"
               />
@@ -78,9 +78,9 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
               />
             )}
 
-            <div className="profile-user-container">
-              <p className="profile-name">{profile?.name}</p>
-              <p className="profile-username">@{profile.username}</p>
+            <div className=" ">
+              <p className=" mb-0 text-md font-semibold">{profile?.name}</p>
+              <p className=" text-gray-500 text-sm">@{profile.username}</p>
             </div>
           </div>
 
@@ -88,9 +88,9 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
             <div className="edit-profile-icon" onClick={handleProfileEdit}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="20px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="20px"
                 fill="#818181"
               >
                 <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
@@ -98,26 +98,28 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
             </div>
           ) : // check if follow/unfollow
           isFollowed ? (
-            <div className="edit-profile-icon">
+            <div className="edit-profile-icon ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="20px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="20px"
                 fill="#818181"
+                className="hover:cursor-pointer hover:opacity-50 transition-all"
                 onClick={handleFollow}
               >
                 <path d="M640-520v-80h240v80H640Zm-280 40q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z" />
               </svg>
             </div>
           ) : (
-            <div className="edit-profile-icon">
+            <div className="edit-profile-icon ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="20px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="20px"
                 fill="#818181"
+                className="hover:cursor-pointer hover:opacity-50 transition-all"
                 onClick={handleFollow}
               >
                 <path d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80Zm-360-80q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z" />
@@ -127,16 +129,16 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
         </div>
 
         {/* followers - following */}
-        <div className="profile-follow">
-          <p className="profile-following">{followings} Following</p>
-          <p className="profile-followers">{followers} Followers</p>
+        <div className="profile-follow flex gap-3 mx-3 my-1">
+          <p className="profile-following text-sm">{followings} Following</p>
+          <p className="profile-followers text-sm">{followers} Followers</p>
         </div>
         <hr className="horizontal-line" />
 
         {/* Bio */}
         {profile.bio && (
           <div>
-            <div className="bio-container">
+            <div className="bio-container mx-3">
               <p className="bio">{profile?.bio}</p>
             </div>
             <hr className="horizontal-line" />
@@ -144,8 +146,8 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
         )}
 
         {profile.birthday && (
-          <div className="profile-info">
-            <div className="birthday-container">
+          <div className="profile-info mx-3">
+            <div className="birthday-container flex gap-2">
               <div className="birthday-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +161,8 @@ export default function Profile({ profile, followers, followings, fetchFollowCou
               </div>
 
               <input
-                className="birthday"
+                className="birthday text-gray-500 text-sm"
+                style={{border: 'none'}}
                 type="birthday"
                 value={profile?.birthday}
                 readOnly

@@ -16,9 +16,9 @@ export default function UpdateProfile() {
   const [birthday, setBirthday] = useState(profile.birthday || null);
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  // const [isDefaultImage, setIsDefaultImage] = useState(
-  //   profileImage ? false : true
-  // );
+  const [isDefaultImage, setIsDefaultImage] = useState(
+    profileImage ? false : true
+  );
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -86,7 +86,7 @@ export default function UpdateProfile() {
             <p>Please enter details below</p>
           </div>
           <div className="image-container">
-            {/* {isDefaultImage ? (
+            {isDefaultImage ? (
               <div
                 className="profile-image"
                 id="profileImage"
@@ -96,7 +96,7 @@ export default function UpdateProfile() {
                     : `url('${defaultImage}')`,
                 }}
               ></div>
-            ) : ( */}
+            ) : (
               <div
                 className="profile-image"
                 id="profileImage"
@@ -106,6 +106,7 @@ export default function UpdateProfile() {
                     : `url('http://localhost:8000${profileImage}')`,
                 }}
               ></div>
+              )}
             {/* )} */}
 
             <button
