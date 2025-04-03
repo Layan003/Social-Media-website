@@ -1,7 +1,7 @@
 # Social Media Website
 
 ## Overview
-The Social Media Website is a web application built with React and Django REST Framework, offering users a dynamic social experience with features like post creation, following/unfollowing users, liking, commenting, and searching for posts.
+Social Media Website is a web application built with React and Django REST Framework, offering users a dynamic social experience with features like post creation, following/unfollowing users, liking, commenting, and searching for posts.
 
 
 ## Features
